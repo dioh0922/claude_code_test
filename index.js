@@ -8,6 +8,10 @@ app.get('/', (req, res) => {
   res.json({ message: 'Hello World!' });
 });
 
+app.get('/list', (req, res) => {
+  res.json({ items: [] });
+});
+
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
