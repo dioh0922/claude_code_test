@@ -41,7 +41,7 @@ const Techlist = sequelize.define('techlist', {
 app.use(express.json());
 
 app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/list.html');
 });
 
 app.get('/list', (req, res) => {
