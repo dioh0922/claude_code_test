@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech List</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .tech-item {
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .project-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .tech-name {
+            font-size: 1.1em;
+            color: #0066cc;
+            margin-top: 5px;
+        }
+        .project-url {
+            margin-top: 5px;
+        }
+        .project-url a {
+            color: #0066cc;
+            text-decoration: none;
+        }
+        .project-url a:hover {
+            text-decoration: underline;
+        }
+        .create-date {
+            margin-top: 5px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        .repository {
+            margin-top: 5px;
+        }
+        .repository a {
+            color: #28a745;
+            text-decoration: none;
+        }
+        .repository a:hover {
+            text-decoration: underline;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tech List</h1>
+    <div id="techlist" class="loading">Loading...</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        async function loadTechList() {
+            try {
+                const response = await axios.get('/api/list');
+                const data = response.data;
+                
+                const container = document.getElementById('techlist');
+                container.innerHTML = '';
+                
+                if (data.items && data.items.length > 0) {
+                    data.items.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'tech-item';
+                        div.innerHTML = `
+                            <div class="project-name">${item.ProjectName || 'No Project Name'}</div>
+                            <div class="tech-name">${item.TechName || 'No Tech Name'}</div>
+                            ${item.URL ? `<div class="project-url"><a href="${item.URL}" target="_blank">${item.URL}</a></div>` : ''}
+                            <div class="create-date">Created: ${item.CreateDate || 'Unknown'}</div>
+                            ${item.Repository ? `<div class="repository"><a href="${item.Repository}" target="_blank">Repository</a></div>` : ''}
+                        `;
+                        container.appendChild(div);
+                    });
+                } else {
+                    container.innerHTML = '<p>No items found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading tech list:', error);
+                document.getElementById('techlist').innerHTML = '<p>Error loading data.</p>';
+            }
+        }
+
+        loadTechList();
+    </script>
+</body>
+</html>
