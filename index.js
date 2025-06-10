@@ -10,17 +10,27 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   dialect: 'mysql'
 });
 
-const Techlist = sequelize.define('Techlist', {
-  id: {
+const Techlist = sequelize.define('techlist', {
+  ProjectID: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true
-  },
-  name: {
-    type: DataTypes.STRING,
     allowNull: false
   },
-  description: {
+  ProjectName: {
+    type: DataTypes.TEXT
+  },
+  TechName: {
+    type: DataTypes.TEXT
+  },
+  URL: {
+    type: DataTypes.TEXT
+  },
+  CreateDate: {
+    type: DataTypes.DATEONLY,
+    allowNull: false,
+    defaultValue: '2019-01-01'
+  },
+  Repository: {
     type: DataTypes.TEXT
   }
 }, {
@@ -40,7 +50,9 @@ app.get('/list', (req, res) => {
 
 app.get('/api/list', async (req, res) => {
   try {
-    const techlist = await Techlist.findAll();
+    const techlist = await Techlist.findAll({
+      order: [['CreateDate', 'DESC']]
+    });
     res.json({ items: techlist });
   } catch (error) {
     console.error('Database error:', error);
